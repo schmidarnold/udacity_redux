@@ -45,7 +45,7 @@ class PostList extends Component{
   render(){
     const posts = this.props.postArray
     const categories = this.props.categories
-    let curPostData=undefined;
+    //let curPostData=undefined;
 
     let showingPosts
     const categoryList = categories.map((item)=>(
