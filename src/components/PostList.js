@@ -21,9 +21,7 @@ class PostList extends Component{
     editPost:false,
   }
 
-  componentDidMount(){
-
-  }
+  
   closeNewPost = () =>{
     //console.log("closing Post from PostList");
     this.setState({editPost:false})
@@ -83,7 +81,7 @@ class PostList extends Component{
         {showingPosts.map((post)=>
           (
 
-            <Post curPost={post} key={post.id} onEdit={this.editPostModal}/>
+            <Post curPost={post} key={post.id} onEdit={this.editPostModal} details={false}/>
 
           )
         )}

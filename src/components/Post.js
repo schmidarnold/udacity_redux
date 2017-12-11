@@ -3,19 +3,14 @@ import { connect } from 'react-redux'
 import { Card,Button,Icon} from 'semantic-ui-react'
 import {deletePostApi, upVotePostApi,downVotePostApi} from '../actions/postActions'
 import { Link } from 'react-router-dom';
+import {withRouter} from "react-router-dom";
+class Post extends Component {
 
-class Post extends Component{
-  state= {
-
-  }
-  componentDidMount(){
-
-  }
 
   deletePost=(curPost)=>{
 
-     console.log("deleting post " + (curPost.id))
-    this.props.deleteCurrentPost(curPost.id).then(() => {
+     //console.log("deleting post " + (this.props.history))
+    this.props.deleteCurrentPost(curPost.id, this.props.history).then(() => {
       console.log("post deleted successfully")
 
     }).catch((err) => {
@@ -28,17 +23,20 @@ class Post extends Component{
   downVotePost=(curPost)=>{
     this.props.downVoteCurrentPost(curPost.id)
   }
-  render(){
-    const {curPost, onEdit} = this.props
+ render(){
+    const {curPost, onEdit, details} = this.props
     let date = new Date(curPost.timestamp)
 
-    console.log(date.toGMTString());
     return(
 
       <Card>
         <Card.Content>
-          <div className='header'><Link to ={`/${curPost.id}/comments`}> {curPost.title} </Link></div>
-
+          {(!details) &&
+          <div className='header'><Link to ={`/${curPost.category}/${curPost.id}`}> {curPost.title} </Link></div>
+          }
+          {(details)&&
+            <div className='header'> {curPost.title} </div>
+          }
         </Card.Content>
           <Card.Content extra>
             author: {curPost.author} <br/>
@@ -59,9 +57,11 @@ class Post extends Component{
 
         </Card.Content>
         <Card.Content extra>
+
           <Button onClick={()=> onEdit(curPost)} icon>
             <Icon name='edit' />
           </Button>
+
           <Button  icon>
             <Icon name='delete' onClick={()=> this.deletePost(curPost)} />
           </Button>
@@ -77,7 +77,7 @@ class Post extends Component{
 
 
     )
-  }
+}
 
 
 }
@@ -88,10 +88,10 @@ function mapStateToProps ({ posts }) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    deleteCurrentPost: (postId)=> dispatch(deletePostApi(postId)),
+    deleteCurrentPost: (postId,history)=> dispatch(deletePostApi(postId,history)),
     upVoteCurrentPost: (postId)=> dispatch(upVotePostApi(postId)),
     downVoteCurrentPost: (postId)=>dispatch(downVotePostApi(postId))
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps) (Post);
+export default withRouter(connect(mapStateToProps,mapDispatchToProps) (Post));

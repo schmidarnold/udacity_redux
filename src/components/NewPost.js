@@ -97,10 +97,16 @@ render(){
    <Modal size='large' open={open} onClose={onClose}>
 
 
-
+      {(this.props.editPost) &&
+       <Modal.Header>
+         EDIT POST
+       </Modal.Header>
+      }
+      {(!this.props.editPost) &&
        <Modal.Header>
          NEW POST
        </Modal.Header>
+      }
        <Modal.Content>
          <Form >
            <Form.Field required>

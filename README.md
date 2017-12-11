@@ -24,3 +24,11 @@ I created different action and reducers file for handling the different componen
 For styling I used the react semantic ui library.
 To enabling a refresh I saved the redux store to the local storage.(see localStorage.js )
 For routing I used react-router. The id for the elements I retrieved in the subcomponents using the this.props.match.params property.
+
+# Resubmission(new changes)
+I changed some classes to functional componentes. I used the browserhistory to put the homepage on it after deleting an post. So the app returns to the main page. If you try to access an deleted post using the address I used conditional rendering.
+
+#ToDo's
+Following things I want to make, but are not requirements of the project:
+* Separating the parts of Comments in CommentList in a new component like POST
+* Reworking on the GUI

@@ -9,11 +9,13 @@ class NavMenu extends Component {
   }
 
   handleItemClick = (e, { name }) => {(
+
     this.setState({ activeItem: name })
 
   )}
 
 render(){
+  console.log(this.state.activeItem)
   const categories = this.props.categories
   const {activeItem} = this.state
 
@@ -24,8 +26,9 @@ render(){
         <Menu pointing>
           <Menu.Item as={Link} to='/' name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
           {categories.map((item)=>(
+
             <Menu.Item key={item.name}
-              as={Link} to={item.name}
+              as={Link} to={"/"+item.name}
               name={item.name} active={activeItem === item.name} onClick={this.handleItemClick} />
           ))}
 

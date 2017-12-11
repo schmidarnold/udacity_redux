@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React from 'react'
 import { Header, Icon, Image } from 'semantic-ui-react'
 
-class ProjHeader extends Component {
-  render(){
+function  ProjHeader(){
+
     return(
       <div>
         <Header as='h2' icon textAlign='center'>
@@ -14,7 +14,7 @@ class ProjHeader extends Component {
         <Image centered size='large' src='/assets/images/wireframe/centered-paragraph.png' />
       </div>
     )
-  }
+
 }
 
 

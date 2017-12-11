@@ -82,11 +82,14 @@ export function editPostApi(post){
       });
   };
 }
-export function deletePostApi(postId){
+export function deletePostApi(postId,browserHistory){
   return function(dispatch){
     return serverApi.deletePost(postId).then(
       post=>{
+        console.log(browserHistory)
+        browserHistory.push("/")
         dispatch(deletePost(post.id))
+
       }
     ).catch(error=>{
       throw(error);

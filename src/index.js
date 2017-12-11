@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import configureStore from './store/configureStore';
 import {BrowserRouter} from 'react-router-dom';
+
 import {Provider} from 'react-redux';
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
@@ -19,7 +20,7 @@ store.dispatch(loadCategories());
 store.dispatch(loadPosts());
 
 
-ReactDOM.render(<BrowserRouter>
+ReactDOM.render(<BrowserRouter >
     <Provider store={store}>
       <App />
     </Provider>

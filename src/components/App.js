@@ -1,25 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
 import NavMenu from './NavMenu';
 import Header from './Header';
 import PostList from './PostList';
 import CommentList from './CommentList'
-import {Route} from 'react-router-dom'
+import {Route,Switch} from 'react-router-dom'
 
-class App extends Component {
-  render() {
+
+function App()  {
+
     return (
       <div>
         <Header />
         <NavMenu />
+        <Switch>
         <Route exact path="/" component={PostList}/>
         <Route exact path="/:category" component={PostList}/>
-        <Route exact path="/:postId/comments" component={CommentList}/>
-        <Route exact path="/:category/:postId/comments" component={CommentList}/>
+
+        <Route exact path="/:category/:postId" component={CommentList}/>
+
+        </Switch>
+
       </div>
 
 
     );
-  }
+
 }
 
 export default App;

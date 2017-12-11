@@ -1,8 +1,11 @@
 import React,{Component} from 'react'
 import { connect } from 'react-redux'
 import {loadPostComments,addCommentApi,upVoteCommentApi, downVoteCommentApi, deleteCommentApi,updateCommentApi} from '../actions/commentActions'
-import { Button, Comment, Form, Header,Card, Icon,Segment } from 'semantic-ui-react'
+import { Button, Comment, Form, Header, Icon,Segment } from 'semantic-ui-react'
 import {default as UUID} from 'node-uuid'
+import Post from './Post'
+import NewPost from './NewPost'
+import PageNotFound from './PageNotFound'
 
 
 class CommentList extends Component{
@@ -12,17 +15,44 @@ class CommentList extends Component{
     body:"",
     isEditing:false,
     selectedId:"",
+    showNewPost:false,
+    editPost:true,
+    isValid:false,
   }
   componentDidMount(){
-    console.log ("component did mount")
+    console.log ("ComponentList - component did mount")
    let curPostId = this.props.match.params.postId
+   if (!curPostId){
+     console.log("curPostId not valid")
+   }
    this.props.getCommentsFromPost(curPostId)
    //console.log("componentDidMount " + curPostId)
+  }
+  componentWillReceiveProps(nextProps){
+    if (this.props.curPost){
+      console.log("componentWillReceiveProps post is valid")
+      this.setState({
+        isValid:true
+      })
+    }else{
+      console.log("componentWillReceiveProps post is not valid")
+    }
+
+
   }
   formattedDate = (timeStamp)=>{
     let fDate = new Date(timeStamp)
   //  console.log("formattedDate: " + fDate.toGMTString())
     return fDate.toGMTString()
+  }
+  editPostModal=(curPost)=>{
+    //console.log("editing existing Post from PostList:  " + JSON.stringify(curPost));
+    this.curPostData = curPost;
+    this.setState({showNewPost:true})
+  }
+  closeNewPost = () =>{
+    //console.log("closing Post from PostList");
+    this.setState({showNewPost:false})
   }
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
   saveNewComment = () => {
@@ -90,18 +120,21 @@ class CommentList extends Component{
     })
   }
   render(){
-    const {curPost,comments}=this.props
+    const {curPost,comments,categories}=this.props
+    const categoryList = categories.map((item)=>(
+      { key:item.name, text: item.name , value: item.name}
+    ))
 
-    let date = new Date(curPost.timestamp)
+      console.log("rendering CommentList")
+
+
+
+
     return(
       <div>
-        <Card>
-          <Card.Content>
-        <Card.Header>{curPost.title}</Card.Header>
-        <Card.Meta>"published: "  {date.toGMTString()}</Card.Meta>
-        <Card.Description>{curPost.body}</Card.Description>
-        </Card.Content>
-      </Card>
+      {this.state.isValid &&
+      <div>
+        <Post curPost={curPost} key={curPost.id}  details={true} onEdit={this.editPostModal}/>
 
       <Comment.Group>
         <Header as='h3' dividing>Comments</Header>
@@ -154,11 +187,11 @@ class CommentList extends Component{
                 </Comment.Actions>
                 <Comment.Actions>
                   <Comment.Action>
-                    <Button  icon>
-                      <Icon name='trash' onClick={()=> this.deleteComment(comment)} />
+                    <Button  icon onClick={()=> this.deleteComment(comment)}>
+                      <Icon name='trash'  />
                     </Button>
-                    <Button  icon>
-                      <Icon name='edit' onClick={()=> this.onEditComment(comment)} />
+                    <Button  icon onClick={()=> this.onEditComment(comment)}>
+                      <Icon name='edit'  />
                     </Button>
                   </Comment.Action>
                 </Comment.Actions>
@@ -174,8 +207,18 @@ class CommentList extends Component{
       </Form>}
     </Segment>
       </Comment.Group>
+      {this.state.showNewPost && <NewPost
+        onClose={this.closeNewPost}
+        categoryList={categoryList}
+        open={true}
+        curPostData={this.curPostData}
+        editPost={this.state.editPost}
+        />}
+      </div>}
+      {!this.state.isValid &&
+        <PageNotFound/>
+      }
       </div>
-
 
     )
   }
@@ -183,14 +226,17 @@ class CommentList extends Component{
 
 }
 function mapStateToProps (state,props) {
-  //console.log("mapStateToProps, postId " + props.match.params.postId)
+  console.log("categoryList: " + state.categories)
+  let categories = state.categories
+  //console.log(JSON.stringify(categories))
   let commentArray = Object.values(state.comments)
   let curPost = state.posts[props.match.params.postId]
   //console.log("mapStateToProps, commentArray: " + JSON.stringify(commentArray))
   //console.log("mapStateToProps, curPost: " + JSON.stringify(curPost))
   return {
     curPost :curPost,
-    comments: commentArray
+    comments: commentArray,
+    categories: categories
   }
 }
 function mapDispatchToProps (dispatch) {

@@ -1,7 +1,8 @@
 import * as types from '../actions/actionTypes';
 
+
 export default function postReducer(state=[],action){
-  console.log("postReducer: " + JSON.stringify(action.post));
+  //console.log("postReducer: " + JSON.stringify(action.post));
   switch(action.type) {
     case types.LOAD_POST_SUCCESS:
     //  return action.posts;
